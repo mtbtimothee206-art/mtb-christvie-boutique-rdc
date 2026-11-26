@@ -40,7 +40,8 @@ footer{max-width:780px;margin:0 auto 30px;padding:0 16px;color:var(--muted);font
 <body>
 <header>
   <h1>ETS MtB CHRISTVIE</h1>
-  <p>Téléphones et accessoires. Livraison à Goma et Bukavu. Commande et contact par WhatsApp.</p>
+  <p>Sens-toi aimé et aime à ton tour.</p>
+  <p>Téléphones et accessoires à très bas prix. Livraison tous les jours à Goma et Bukavu. Commande et contact par WhatsApp.</p>
 </header>
 
 <main>
@@ -60,7 +61,8 @@ footer{max-width:780px;margin:0 auto 30px;padding:0 16px;color:var(--muted);font
     <h2>Livraison</h2>
     <div class="box">
       <p><strong>Zones :</strong> Goma et Bukavu.</p>
-      <p><strong>Délais et frais :</strong> à confirmer par WhatsApp lors de la commande.</p>
+      <p><strong>Jours :</strong> livraison tous les jours.</p>
+      <p><strong>Frais et délais :</strong> à confirmer par WhatsApp lors de la commande.</p>
       <p><strong>Paiement :</strong> Airtel Money, Orange Money, Africell Money, M-Pesa. À confirmer avec le vendeur.</p>
     </div>
   </section>
@@ -96,19 +98,22 @@ footer{max-width:780px;margin:0 auto 30px;padding:0 16px;color:var(--muted);font
 
 <script>
 // ===== À MODIFIER (voir la liste des informations à confirmer) =====
-var WHATSAPP = "243000000000"; // numéro professionnel, format international sans + ni espaces
-var PRODUITS = [ // exemples à remplacer
-  {n:"Smartphone Android 128 Go", c:"Téléphones", p:"150 $", i:"📱"},
-  {n:"Smartphone Android 256 Go", c:"Téléphones", p:"220 $", i:"📱"},
-  {n:"iPhone d'occasion", c:"Téléphones", p:"350 $", i:"📱"},
-  {n:"Chargeur rapide", c:"Accessoires", p:"8 $", i:"🔌"},
-  {n:"Écouteurs Bluetooth", c:"Accessoires", p:"15 $", i:"🎧"},
-  {n:"Coque de protection", c:"Accessoires", p:"5 $", i:"🛡️"}
+var WHATSAPP = "243974791904"; // numéro professionnel, format international sans + ni espaces
+var PRODUITS = [ // p:"" = prix confirmé sur WhatsApp
+  {n:"Tecno T528", c:"Téléphones", p:"35 000 FC", i:"📱"},
+  {n:"Smartphones et iPhone", c:"Téléphones", p:"", i:"📱"},
+  {n:"Radio Wikko", c:"Radios", p:"25 000 FC", i:"📻"},
+  {n:"Chargeur", c:"Accessoires", p:"5 000 FC", i:"🔌"},
+  {n:"Pochette toutes marques (Android et iPhone)", c:"Accessoires", p:"7 000 FC", i:"🛡️"},
+  {n:"Power bank", c:"Accessoires", p:"", i:"🔋"},
+  {n:"Écouteurs", c:"Accessoires", p:"", i:"🎧"},
+  {n:"Casque Bluetooth", c:"Accessoires", p:"", i:"🎧"},
+  {n:"Enceinte Bluetooth", c:"Accessoires", p:"", i:"🔊"}
 ];
 // ==================================================================
 
 function wa(m){return "https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(m)}
-document.getElementById("contact").textContent = "ETS MtB CHRISTVIE – Goma et Bukavu, RDC";
+document.getElementById("contact").textContent = "ETS MtB CHRISTVIE – Goma et Bukavu, RDC – WhatsApp : +243 974 791 904";
 
 var cats=["Tout"].concat(PRODUITS.map(function(x){return x.c}).filter(function(v,i,a){return a.indexOf(v)===i}));
 var cur="Tout";
@@ -122,9 +127,9 @@ function render(){
   PRODUITS.filter(function(x){return cur==="Tout"||x.c===cur}).forEach(function(x){
     var d=document.createElement("div"); d.className="item";
     d.innerHTML='<div class="pic" aria-hidden="true">'+x.i+'</div><h3></h3><span class="cat"></span><span class="price"></span>';
-    d.querySelector("h3").textContent=x.n; d.querySelector(".cat").textContent=x.c; d.querySelector(".price").textContent=x.p;
+    d.querySelector("h3").textContent=x.n; d.querySelector(".cat").textContent=x.c; d.querySelector(".price").textContent=x.p||"Prix sur WhatsApp";
     var a=document.createElement("a"); a.className="btn"; a.textContent="Commander sur WhatsApp";
-    a.href=wa("Bonjour, je veux commander : "+x.n+" ("+x.p+"). Est-il disponible ?"); a.target="_blank"; a.rel="noopener";
+    a.href=wa("Bonjour, je veux commander : "+x.n+(x.p?" ("+x.p+"). Est-il disponible ?":". Quels modèles et quels prix avez-vous ?")); a.target="_blank"; a.rel="noopener";
     d.appendChild(a); g.appendChild(d);
   });
 }
