@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0d0d0d">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MtB CHRISTVIE">
 <title>ETS MtB CHRISTVIE – Téléphones et accessoires à Goma et Bukavu</title>
 <style>
 :root{--bg:#0d0d0d;--card:#181818;--line:#3a3220;--gold:#d4a72c;--text:#f3efe4;--muted:#b3ab98;--wa:#1f9d57}
@@ -23,7 +27,8 @@ h2{font-size:1.15rem;margin:8px 0 12px}
 .filters button[aria-pressed=true]{border-color:var(--gold);color:var(--gold)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
 .item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px}
-.pic{height:84px;border-radius:8px;border:1px dashed var(--line);display:grid;place-items:center;font-size:2rem}
+.pic{height:150px;border-radius:8px;border:1px solid var(--line);display:grid;place-items:center;font-size:2rem;overflow:hidden}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
 .item h3{margin:4px 0 0;font-size:1rem}
 .cat{color:var(--muted);font-size:.85rem}
 .price{font-weight:800;color:var(--gold);font-size:1.15rem}
@@ -34,6 +39,7 @@ form{display:grid;gap:14px}
 label{display:grid;gap:5px;font-weight:600}
 select,input,textarea{padding:12px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#0d0d0d;color:var(--text)}
 button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+#install{margin-bottom:12px}
 footer{max-width:780px;margin:0 auto 30px;padding:0 16px;color:var(--muted);font-size:.9rem}
 </style>
 </head>
@@ -94,21 +100,25 @@ footer{max-width:780px;margin:0 auto 30px;padding:0 16px;color:var(--muted);font
   </section>
 </main>
 
-<footer><p id="contact"></p></footer>
+<footer>
+  <button class="btn" id="install" hidden>Installer l'application</button>
+  <p id="astuce"></p>
+  <p id="contact"></p>
+</footer>
 
 <script>
 // ===== À MODIFIER (voir la liste des informations à confirmer) =====
 var WHATSAPP = "243974791904"; // numéro professionnel, format international sans + ni espaces
-var PRODUITS = [ // p:"" = prix confirmé sur WhatsApp
-  {n:"Tecno T528", c:"Téléphones", p:"35 000 FC", i:"📱"},
+var PRODUITS = [ // p:"" = prix confirmé sur WhatsApp ; img = nom de la photo
+  {n:"Tecno T528", c:"Téléphones", p:"35 000 FC", i:"📱", img:"tecno-t528.jpg"},
   {n:"Smartphones et iPhone", c:"Téléphones", p:"", i:"📱"},
-  {n:"Radio Wikko", c:"Radios", p:"25 000 FC", i:"📻"},
-  {n:"Chargeur", c:"Accessoires", p:"5 000 FC", i:"🔌"},
-  {n:"Pochette toutes marques (Android et iPhone)", c:"Accessoires", p:"7 000 FC", i:"🛡️"},
-  {n:"Power bank", c:"Accessoires", p:"", i:"🔋"},
-  {n:"Écouteurs", c:"Accessoires", p:"", i:"🎧"},
-  {n:"Casque Bluetooth", c:"Accessoires", p:"", i:"🎧"},
-  {n:"Enceinte Bluetooth", c:"Accessoires", p:"", i:"🔊"}
+  {n:"Radio Wikko", c:"Radios", p:"25 000 FC", i:"📻", img:"radio-wikko.jpg"},
+  {n:"Chargeur", c:"Accessoires", p:"5 000 FC", i:"🔌", img:"chargeur.jpg"},
+  {n:"Pochette toutes marques (Android et iPhone)", c:"Accessoires", p:"7 000 FC", i:"🛡️", img:"pochette.jpg"},
+  {n:"Power bank", c:"Accessoires", p:"", i:"🔋", img:"power-bank.jpg"},
+  {n:"Écouteurs", c:"Accessoires", p:"", i:"🎧", img:"ecouteurs.jpg"},
+  {n:"Casque Bluetooth", c:"Accessoires", p:"", i:"🎧", img:"casque.jpg"},
+  {n:"Enceinte Bluetooth", c:"Accessoires", p:"", i:"🔊", img:"enceinte.jpg"}
 ];
 // ==================================================================
 
@@ -126,7 +136,9 @@ function render(){
   var g=document.getElementById("grid"); g.innerHTML="";
   PRODUITS.filter(function(x){return cur==="Tout"||x.c===cur}).forEach(function(x){
     var d=document.createElement("div"); d.className="item";
-    d.innerHTML='<div class="pic" aria-hidden="true">'+x.i+'</div><h3></h3><span class="cat"></span><span class="price"></span>';
+    d.innerHTML='<div class="pic"></div><h3></h3><span class="cat"></span><span class="price"></span>';
+    var pic=d.querySelector(".pic");
+    if(x.img){var im=document.createElement("img");im.src=x.img;im.alt=x.n;im.loading="lazy";im.onerror=function(){pic.textContent=x.i;pic.setAttribute("aria-hidden","true")};pic.appendChild(im);}else{pic.textContent=x.i;pic.setAttribute("aria-hidden","true");}
     d.querySelector("h3").textContent=x.n; d.querySelector(".cat").textContent=x.c; d.querySelector(".price").textContent=x.p||"Prix sur WhatsApp";
     var a=document.createElement("a"); a.className="btn"; a.textContent="Commander sur WhatsApp";
     a.href=wa("Bonjour, je veux commander : "+x.n+(x.p?" ("+x.p+"). Est-il disponible ?":". Quels modèles et quels prix avez-vous ?")); a.target="_blank"; a.rel="noopener";
@@ -152,6 +164,13 @@ document.getElementById("ex").onsubmit=function(e){
     "\n- Paiement : "+v("moyen")+"\n- Ville : "+v("ville")+"\n- Nom : "+v("nom")+"\nMerci de me confirmer le taux, les frais et le délai.";
   window.open(wa(m),"_blank","noopener");
 };
+
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
+var dp=null,bi=document.getElementById("install");
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();dp=e;bi.hidden=false});
+bi.onclick=function(){if(dp){dp.prompt();dp=null;bi.hidden=true}};
+window.addEventListener("appinstalled",function(){bi.hidden=true});
+if(/iphone|ipad/i.test(navigator.userAgent)&&!navigator.standalone){document.getElementById("astuce").textContent="Sur iPhone : touchez Partager puis « Sur l'écran d'accueil » pour installer l'application."}
 </script>
 </body>
 </html>
